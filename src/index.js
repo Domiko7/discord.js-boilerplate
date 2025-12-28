@@ -27,4 +27,29 @@ client.on(Events.InteractionCreate, async interaction => {
   }
 });
 
+// IF U WANT PREFIX COMMANDS add this ->
+/*
+client.on("messageCreate", async (message) => {
+    if (message.author.bot || !message.content.startsWith(prefix)) return;
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const command = args.shift().toLowerCase();
+
+    if (command === 'ban') {
+        // PERMISSION CHECK: Check if the user is a mod
+        if (!message.member.permissions.has(PermissionFlagsBits.BanMembers)) {
+            return message.reply("❌ Only Moderators can use this command.");
+        }
+
+        const member = message.mentions.members.first();
+        if (!member) return message.reply("Please mention a user to ban.");
+
+        try {
+            await member.ban();
+            message.reply(✅ Successfully banned ${member.user.tag});
+        } catch (err) {
+            message.reply("I couldn't ban that user. Do I have the right permissions?");
+        }
+    }
+});
+*/
 client.login(token);
