@@ -1,0 +1,23 @@
+{
+  "name": "domiko_labs-bot",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Domiko7/Domiko-labs-discord-bot"
+  },
+  "license": "MIT",
+  "author": "Dominik S.",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.5.0",
+    "discord.js": "^14.22.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "eslint": "^9.36.0"
+  }
+}
