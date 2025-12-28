@@ -8,9 +8,9 @@ module.exports = {
   async execute(interaction) {
   const embed = new EmbedBuilder()
     .setColor(0xFF0000)
-    .setTitle('Pong - 🏓')
+    .setTitle("Pong - 🏓")
     .setTimestamp()
-    .setFooter({ text: 'Made by Domiko' });
+    .setFooter({ text: "Made by Domiko" });
 
     const start = Date.now();
     const message = await interaction.reply({ embeds: [embed], withResponse: true });
