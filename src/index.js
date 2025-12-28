@@ -1,43 +1,49 @@
-
-const { Client, Events, GatewayIntentBits, Collection } = require("discord.js");
+const { Client, Events, GatewayIntentBits, Collection, PermissionFlagsBits } = require("discord.js");
 const { token } = require("../config.json");
+const client = new Client({ 
+    intents: [
+        GatewayIntentBits.Guilds, 
+        GatewayIntentBits.GuildMessages, 
+        GatewayIntentBits.MessageContent 
+    ] 
+});
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const initCommands = require("./commands/commands.js");
+const prefix = "!";
 
 client.commands = new Collection();
 initCommands(client);
 
 client.once(Events.ClientReady, readyClient => {
-  console.log(`Ready! Logged in as:\n${readyClient.user.tag}`)
+  console.log(`Ready! Logged in as: ${readyClient.user.tag}`);
 });
 
+// --- SLASH COMMAND HANDLER ---
 client.on(Events.InteractionCreate, async interaction => {
-  if (!interaction.isCommand()) return;
+  if (!interaction.isChatInputCommand()) return;
 
   const command = client.commands.get(interaction.commandName);
-
   if (!command) return;
 
   try {
     await command.execute(interaction);
   } catch (err) {
     console.error(err);
-    await interaction.reply({ content: "There was an error with executing this command!", ephemeral: true })
+    await interaction.reply({ content: "There was an error with executing this command!", ephemeral: true });
   }
 });
 
-// IF U WANT PREFIX COMMANDS add this ->
+// --- PREFIX COMMAND HANDLER ---
 /*
-client.on("messageCreate", async (message) => {
+client.on(Events.MessageCreate, async (message) => {
     if (message.author.bot || !message.content.startsWith(prefix)) return;
-    const args = message.content.slice(prefix.length).trim().split(/ +/);
-    const command = args.shift().toLowerCase();
 
-    if (command === 'ban') {
-        // PERMISSION CHECK: Check if the user is a mod
-        if (!message.member.permissions.has(PermissionFlagsBits.BanMembers)) {
-            return message.reply("❌ Only Moderators can use this command.");
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const commandName = args.shift().toLowerCase();
+
+    if (commandName === 'ban') {
+              if (!message.member.permissions.has(PermissionFlagsBits.BanMembers)) {
+            return message.reply("❌ Only Moderators with 'Ban Members' permission can use this.");
         }
 
         const member = message.mentions.members.first();
@@ -45,9 +51,10 @@ client.on("messageCreate", async (message) => {
 
         try {
             await member.ban();
-            message.reply(✅ Successfully banned ${member.user.tag});
+            message.reply(`✅ Successfully banned ${member.user.tag}`);
         } catch (err) {
-            message.reply("I couldn't ban that user. Do I have the right permissions?");
+            console.error(err);
+            message.reply("I couldn't ban that user. Check my role position and permissions.");
         }
     }
 });
